@@ -2,39 +2,20 @@ const fs = require("fs");
 const path = require("path");
 const xlsx = require("xlsx");
 
-describe("Fungsionalitas Laporan Data Poli", () => {
+describe("Fungsionalitas Laporan Data petugas", () => {
   beforeEach(() => {
     cy.viewport("macbook-11");
     cy.login("fadil123", "fadil123");
-    // Event listener untuk menangani uncaught exceptions
-    Cypress.on("uncaught:exception", (err, runnable) => {
-      // Ambil screenshot ketika ada uncaught exception
-      cy.screenshot("uncaught-exception");
-      // Return false untuk mencegah Cypress gagal pada uncaught exception
-      return false;
-    });
-
-    // Event listener untuk menangani tes yang gagal
-    Cypress.on("fail", (error, runnable) => {
-      // Ambil screenshot ketika tes gagal
-      cy.screenshot("test-failure");
-      // Throw error untuk memastikan tes tetap gagal
-      throw error;
-    });
   });
 
-  const navigateToLapDataPoli = () => {
-    cy.get("#menu_1").click();
-    cy.get("#menu_31 > span").click();
-    cy.url().should("include", "/laporan-master-poli");
-    cy.get("h1").should(
-      "have.text",
-      "\n                            Laporan Data Poli"
-    );
+  const navigateToLaporanDatapetugas = () => {
+    cy.get("#menu_599").click();
+    cy.get("#menu_248").click();
+    cy.url().should("include", "/laporan-data-petugas");
   };
 
-  const getAllPoliData = () => {
-    const poliData = [];
+  const getAllpetugasData = () => {
+    const petugasData = [];
 
     const getPageData = () => {
       return cy.get("tbody tr").then((rows) => {
@@ -45,7 +26,7 @@ describe("Fungsionalitas Laporan Data Poli", () => {
             .each((i, cell) => {
               rowData.push(Cypress.$(cell).text().trim());
             });
-          poliData.push(rowData);
+          petugasData.push(rowData);
         });
 
         // Cek apakah ada tombol "Next" untuk pagination
@@ -62,21 +43,18 @@ describe("Fungsionalitas Laporan Data Poli", () => {
       });
     };
 
-    return getPageData().then(() => poliData);
+    return getPageData().then(() => petugasData);
   };
 
-  context("Filter Data Poli", () => {
+  context("Filter Data petugas", () => {
     beforeEach(() => {
       navigateToLapDataPoli();
     });
 
     it("Filter Data Poli", () => {
       navigateToLapDataPoli();
-      cy.get(":nth-child(2) > .form-control").type("Poli Umum{enter}");
-      cy.get(":nth-child(3) > .form-control").type("Dokter Umum{enter}");
-      cy.get('[data-key="0"] > :nth-child(2)').should("have.text", "Poli Umum");
-      cy.get("tbody > tr > :nth-child(3)").should("have.text", "Dokter Umum");
-      cy.get("tbody > tr > :nth-child(4)").should("have.text", "Aktif");
+      cy.get(":nth-child(2) > .form-control").type("A{enter}");
+      cy.get(":nth-child(3) > .form-control").type("A{enter}");
       cy.get("#w2").should(
         "contain",
         "Menampilkan 1 - 1 data dari total 1 data"
@@ -84,14 +62,14 @@ describe("Fungsionalitas Laporan Data Poli", () => {
     });
   });
 
-  context("Cetak data poli", () => {
+  context("Cetak data petugas", () => {
     beforeEach(() => {
-      navigateToLapDataPoli();
+      navigateToLapDatapetugas();
     });
 
     it("Memastikan data pada tabel sesuai dengan data yang dicetak tanpa filter", () => {
       // Ambil semua data dari semua halaman tabel
-      getAllPoliData().then((poliData) => {
+      getAllpetugasData().then((petugasData) => {
         // Klik tombol cetak
         cy.get("#cetak").invoke("removeAttr", "target").click();
         cy.get("b").should("have.text", "LAPORAN REKAP DATA POLI");
@@ -118,15 +96,15 @@ describe("Fungsionalitas Laporan Data Poli", () => {
             );
 
             // Bandingkan data dari kedua tabel
-            expect(filteredPrintedData).to.deep.equal(poliData);
+            expect(filteredPrintedData).to.deep.equal(petugasData);
           });
       });
     });
 
     it.only("Memastikan data pada tabel sesuai dengan data yang dicetak (dengan filter)", () => {
       cy.get(":nth-child(2) > .form-control").type("Poli Umum{enter}");
-      cy.get(":nth-child(3) > .form-control").type("Dokter Umum{enter}");
-      getAllPoliData().then((poliData) => {
+      cy.get(":nth-child(3) > .form-control").type("petugas Umum{enter}");
+      getAllpetugasData().then((petugasData) => {
         // Klik tombol cetak
         cy.get("#cetak").invoke("removeAttr", "target").click();
         cy.get("b").should("have.text", "LAPORAN REKAP DATA POLI");
@@ -153,83 +131,83 @@ describe("Fungsionalitas Laporan Data Poli", () => {
             );
 
             // Bandingkan data dari kedua tabel
-            expect(filteredPrintedData).to.deep.equal(poliData);
+            expect(filteredPrintedData).to.deep.equal(petugasData);
           });
       });
     });
   });
 
-  context("Export Data Poli", () => {
+  context("Export Data petugas ke Excel", () => {
     beforeEach(() => {
-      navigateToLapDataPoli();
+      navigateToLaporanDatapetugas();
     });
 
-    it("Memastikan data pada tabel sesuai dengan data yang diexport", () => {
-      // Ambil semua data dari semua halaman tabel
-      getAllPoliData().then((poliData) => {
-        // Klik tombol cetak
-        cy.get("#excel").click();
+    it("Export data petugas ke excel", () => {
+      const fileName = "laporan_data_petugas.xlsx";
+      const filePath = path.join("cypress/downloads", fileName);
 
-        // Tunggu hingga file diunduh
-        const downloadsFolder = Cypress.config("downloadsFolder");
-        const filePath = path.join(
-          downloadsFolder,
-          "Export_Laporan_Data_Poli.xls"
-        );
+      cy.get("#btnExportExcel").click();
+      cy.wait(5000);
+      cy.readFile(filePath).should("exist");
+      fs.unlinkSync(filePath);
+    });
 
-        cy.readFile(filePath, { timeout: 15000 }).should("exist");
+    it("Export data petugas ke excel dengan data", () => {
+      const fileName = "laporan_data_petugas.xlsx";
+      const filePath = path.join("cypress/downloads", fileName);
 
-        // Baca dan parse file Excel
-        cy.readFile(filePath, "binary").then((fileContent) => {
-          const workbook = xlsx.read(fileContent, { type: "binary" });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const excelData = xlsx.utils.sheet_to_json(worksheet);
+      cy.get("#btnExportExcel").click();
+      cy.wait(5000);
+      cy.readFile(filePath).should("exist");
 
-          // Lakukan assert pada data yang diambil dari file Excel
-          expect(excelData).to.have.length.greaterThan(0);
-          // Tambahkan assert lainnya sesuai kebutuhan Anda
-        });
-      });
+      const workbook = xlsx.readFile(filePath);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = xlsx.utils.sheet_to_json(sheet);
+
+      expect(data).to.have.length.greaterThan(0);
+      fs.unlinkSync(filePath);
     });
   });
 
-  context("Sorting A-Z dan Z-A Laporan Data Poli", () => {
+  context("Sorting A-Z dan Z-A Laporan Data petugas", () => {
     beforeEach(() => {
-      navigateToLapDataPoli();
+      navigateToLapDatapetugas();
     });
 
     it("Memastikan data berubah setelah sorting pada kolom Nama", () => {
-      const getPoliNamesFromFirstPage = () => {
-        const poliNames = [];
+      const getpetugasNamesFromFirstPage = () => {
+        const petugasNames = [];
 
         return cy.get("tbody tr").then((rows) => {
           rows.each((index, row) => {
-            const poliName = Cypress.$(row).find("td").eq(2).text().trim();
-            poliNames.push(poliName);
+            const petugasName = Cypress.$(row).find("td").eq(2).text().trim();
+            petugasNames.push(petugasName);
           });
-          return poliNames;
+          return petugasNames;
         });
       };
 
       // Ambil semua data dari halaman pertama tabel sebelum pengurutan
-      getPoliNamesFromFirstPage().then((poliNamesBeforeSort) => {
+      getpetugasNamesFromFirstPage().then((petugasNamesBeforeSort) => {
         // Klik header tabel untuk mengurutkan data A-Z
         cy.get("thead > :nth-child(1) > :nth-child(2) > a").click();
 
         // Tunggu hingga data diurutkan dan ambil kembali semua data dari halaman pertama tabel setelah pengurutan A-Z
-        getPoliNamesFromFirstPage().then((poliNamesAfterSortAZ) => {
+        getpetugasNamesFromFirstPage().then((petugasNamesAfterSortAZ) => {
           // Validasi bahwa data berubah setelah pengurutan A-Z
-          expect(poliNamesBeforeSort).to.not.deep.equal(poliNamesAfterSortAZ);
+          expect(petugasNamesBeforeSort).to.not.deep.equal(
+            petugasNamesAfterSortAZ
+          );
 
           // Klik header tabel lagi untuk mengurutkan data Z-A
           cy.get("thead > :nth-child(1) > :nth-child(2) > a").click();
 
           // Tunggu hingga data diurutkan dan ambil kembali semua data dari halaman pertama tabel setelah pengurutan Z-A
-          getPoliNamesFromFirstPage().then((poliNamesAfterSortZA) => {
+          getpetugasNamesFromFirstPage().then((petugasNamesAfterSortZA) => {
             // Validasi bahwa data berubah setelah pengurutan Z-A
-            expect(poliNamesAfterSortAZ).to.not.deep.equal(
-              poliNamesAfterSortZA
+            expect(petugasNamesAfterSortAZ).to.not.deep.equal(
+              petugasNamesAfterSortZA
             );
           });
         });
@@ -237,54 +215,58 @@ describe("Fungsionalitas Laporan Data Poli", () => {
     });
 
     it("Memastikan data berubah setelah sorting pada kolom Keterangan", () => {
-      const getPoliKeterangansFromFirstPage = () => {
-        const poliKeterangans = [];
+      const getpetugasKeterangansFromFirstPage = () => {
+        const petugasKeterangans = [];
 
         return cy.get("tbody tr").then((rows) => {
           rows.each((index, row) => {
-            const poliKeterangan = Cypress.$(row)
+            const petugasKeterangan = Cypress.$(row)
               .find("td")
               .eq(2)
               .text()
               .trim();
-            poliKeterangans.push(poliKeterangan);
+            petugasKeterangans.push(petugasKeterangan);
           });
-          return poliKeterangans;
+          return petugasKeterangans;
         });
       };
 
       // Ambil semua data dari halaman pertama tabel sebelum pengurutan
-      getPoliKeterangansFromFirstPage().then((poliKeterangansBeforeSort) => {
-        // Klik header tabel untuk mengurutkan data A-Z
-        cy.get("thead > :nth-child(1) > :nth-child(3) > a").click();
-
-        // Tunggu hingga data diurutkan dan ambil kembali semua data dari halaman pertama tabel setelah pengurutan A-Z
-        getPoliKeterangansFromFirstPage().then((poliKeterangansAfterSortAZ) => {
-          // Validasi bahwa data berubah setelah pengurutan A-Z
-          expect(poliKeterangansBeforeSort).to.not.deep.equal(
-            poliKeterangansAfterSortAZ
-          );
-
-          // Klik header tabel lagi untuk mengurutkan data Z-A
+      getpetugasKeterangansFromFirstPage().then(
+        (petugasKeterangansBeforeSort) => {
+          // Klik header tabel untuk mengurutkan data A-Z
           cy.get("thead > :nth-child(1) > :nth-child(3) > a").click();
 
-          // Tunggu hingga data diurutkan dan ambil kembali semua data dari halaman pertama tabel setelah pengurutan Z-A
-          getPoliKeterangansFromFirstPage().then(
-            (poliKeterangansAfterSortZA) => {
-              // Validasi bahwa data berubah setelah pengurutan Z-A
-              expect(poliKeterangansAfterSortAZ).to.not.deep.equal(
-                poliKeterangansAfterSortZA
+          // Tunggu hingga data diurutkan dan ambil kembali semua data dari halaman pertama tabel setelah pengurutan A-Z
+          getpetugasKeterangansFromFirstPage().then(
+            (petugasKeterangansAfterSortAZ) => {
+              // Validasi bahwa data berubah setelah pengurutan A-Z
+              expect(petugasKeterangansBeforeSort).to.not.deep.equal(
+                petugasKeterangansAfterSortAZ
+              );
+
+              // Klik header tabel lagi untuk mengurutkan data Z-A
+              cy.get("thead > :nth-child(1) > :nth-child(3) > a").click();
+
+              // Tunggu hingga data diurutkan dan ambil kembali semua data dari halaman pertama tabel setelah pengurutan Z-A
+              getpetugasKeterangansFromFirstPage().then(
+                (petugasKeterangansAfterSortZA) => {
+                  // Validasi bahwa data berubah setelah pengurutan Z-A
+                  expect(petugasKeterangansAfterSortAZ).to.not.deep.equal(
+                    petugasKeterangansAfterSortZA
+                  );
+                }
               );
             }
           );
-        });
-      });
+        }
+      );
     });
   });
 
-  context("Pagination Laporan Data Poli", () => {
+  context("Pagination Laporan Data petugas", () => {
     beforeEach(() => {
-      navigateToLapDataPoli();
+      navigateToLapDatapetugas();
     });
     it("Memastikan data berubah setelah mengklik halaman pagination", () => {
       const getDataFromCurrentPage = () => {
