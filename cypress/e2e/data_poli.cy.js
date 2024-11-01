@@ -37,6 +37,172 @@ describe("Fungsionalitas Data Poli", () => {
     cy.get('label[for="poli-polket"]').should("have.text", "Keterangan");
   };
 
+  const listPoli = [
+    {
+      nama: "Poli Umum",
+      deskripsi:
+        "Pelayanan kesehatan dasar untuk diagnosis dan pengobatan penyakit umum yang tidak memerlukan spesialisasi tertentu.",
+    },
+    {
+      nama: "Poli Anak",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani kesehatan bayi, anak-anak, dan remaja dengan fokus pada pencegahan dan pengobatan penyakit.",
+    },
+    {
+      nama: "Poli Gigi dan Mulut",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada perawatan dan pengobatan masalah gigi, gusi, dan mulut.",
+    },
+    {
+      nama: "Poli Kebidanan dan Kandungan",
+      deskripsi:
+        "Pelayanan kesehatan untuk wanita, termasuk pemeriksaan kehamilan, persalinan, dan perawatan pasca melahirkan serta pengobatan masalah kesehatan reproduksi wanita.",
+    },
+    {
+      nama: "Poli Penyakit Dalam",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani penyakit pada organ dalam tubuh seperti diabetes, hipertensi, dan penyakit lainnya yang membutuhkan penanganan lebih lanjut.",
+    },
+    {
+      nama: "Poli Bedah Umum",
+      deskripsi:
+        "Pelayanan bedah untuk berbagai penyakit yang memerlukan intervensi bedah, seperti operasi usus buntu, hernia, dan lainnya.",
+    },
+    {
+      nama: "Poli Bedah Saraf",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani penyakit atau gangguan sistem saraf yang memerlukan tindakan bedah, seperti tumor otak atau cedera saraf.",
+    },
+    {
+      nama: "Poli Jantung dan Pembuluh Darah",
+      deskripsi:
+        "Pelayanan kesehatan yang khusus menangani penyakit jantung dan sistem peredaran darah, seperti hipertensi, penyakit jantung koroner, dan lainnya.",
+    },
+    {
+      nama: "Poli Mata",
+      deskripsi:
+        "Pelayanan kesehatan untuk diagnosis, perawatan, dan pengobatan berbagai penyakit atau kelainan pada mata.",
+    },
+    {
+      nama: "Poli Telinga Hidung Tenggorok (THT)",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada diagnosis dan pengobatan penyakit pada telinga, hidung, dan tenggorokan.",
+    },
+    {
+      nama: "Poli Paru",
+      deskripsi:
+        "Pelayanan kesehatan untuk menangani penyakit pada sistem pernapasan, seperti asma, bronkitis, dan penyakit paru obstruktif kronis (PPOK).",
+    },
+    {
+      nama: "Poli Saraf",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani gangguan pada sistem saraf, termasuk otak, sumsum tulang belakang, dan saraf tepi.",
+    },
+    {
+      nama: "Poli Kulit dan Kelamin",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani penyakit pada kulit, rambut, kuku, serta kelamin, seperti infeksi kulit atau penyakit menular seksual.",
+    },
+    {
+      nama: "Poli Rehabilitasi Medik",
+      deskripsi:
+        "Pelayanan kesehatan untuk membantu pemulihan fungsi fisik dan kognitif setelah cedera atau penyakit, termasuk fisioterapi.",
+    },
+    {
+      nama: "Poli Psikiatri",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani gangguan mental dan emosional, seperti depresi, skizofrenia, atau gangguan kecemasan.",
+    },
+    {
+      nama: "Poli Anestesi",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada manajemen nyeri dan anestesi selama prosedur bedah atau tindakan medis.",
+    },
+    {
+      nama: "Poli Urologi",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani penyakit pada saluran kemih dan sistem reproduksi pria, seperti batu ginjal atau gangguan prostat.",
+    },
+    {
+      nama: "Poli Orthopedi",
+      deskripsi:
+        "Pelayanan kesehatan untuk diagnosis dan pengobatan penyakit atau cedera pada sistem muskuloskeletal, seperti tulang, sendi, dan otot.",
+    },
+    {
+      nama: "Poli Gizi Klinik",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada manajemen diet dan gizi untuk mendukung pengobatan dan pencegahan penyakit.",
+    },
+    {
+      nama: "Poli Endokrinologi",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani gangguan pada kelenjar endokrin dan masalah hormon, seperti diabetes dan gangguan tiroid.",
+    },
+    {
+      nama: "Poli Hematologi",
+      deskripsi:
+        "Pelayanan kesehatan yang khusus menangani penyakit darah dan sistem pembentukan darah, seperti anemia dan leukemia.",
+    },
+    {
+      nama: "Poli Onkologi",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada diagnosis dan pengobatan kanker, termasuk perawatan kemoterapi dan radioterapi.",
+    },
+    {
+      nama: "Poli Geriatri",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada perawatan kesehatan lansia, termasuk penanganan penyakit yang sering dialami pada usia tua.",
+    },
+    {
+      nama: "Poli Reumatologi",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani penyakit sendi, tulang, dan otot, termasuk penyakit autoimun seperti lupus dan rheumatoid arthritis.",
+    },
+    {
+      nama: "Poli Kedokteran Nuklir",
+      deskripsi:
+        "Pelayanan kesehatan yang menggunakan teknik diagnostik dan terapi dengan bahan radioaktif untuk penyakit tertentu.",
+    },
+    {
+      nama: "Poli Kedokteran Forensik",
+      deskripsi:
+        "Pelayanan kesehatan yang berfokus pada pemeriksaan medis untuk tujuan hukum, seperti otopsi dan identifikasi korban.",
+    },
+    {
+      nama: "Poli Patologi Klinik",
+      deskripsi:
+        "Pelayanan kesehatan untuk pemeriksaan laboratorium guna membantu diagnosis penyakit melalui analisis darah, urin, dan jaringan tubuh lainnya.",
+    },
+    {
+      nama: "Poli Patologi Anatomi",
+      deskripsi:
+        "Pelayanan kesehatan untuk mendiagnosis penyakit melalui analisis jaringan tubuh, termasuk biopsi.",
+    },
+    {
+      nama: "Poli Penyakit Tropik dan Infeksi",
+      deskripsi:
+        "Pelayanan kesehatan yang menangani penyakit menular dan infeksi tropis seperti malaria, demam berdarah, dan tuberkulosis.",
+    },
+  ];
+
+  const listTipeFisikLokasi = [
+    "Area",
+    "Bed",
+    "Building",
+    "Cabinet",
+    "Corridor",
+    "House",
+    "Jurisdiction",
+    "Level",
+    "Road",
+    "Room",
+    "Site",
+    "Vehicle",
+    "Virtual",
+    "Ward",
+    "Wing",
+  ];
+
   context("Menambah Data Poli", () => {
     beforeEach(() => {
       navigateToDataPoli();
@@ -49,9 +215,13 @@ describe("Fungsionalitas Data Poli", () => {
     });
 
     it("Menambah Data Poli Baru dengan data yang lengkap", () => {
-      const name = faker.company.name();
-      const locationType = "Room"; // Anda bisa menggunakan faker untuk menghasilkan data acak jika diperlukan
-      const description = faker.lorem.sentence();
+      const selectedPoli = faker.helpers.arrayElement(listPoli);
+
+      // Mengambil nama dan deskripsi dari elemen yang dipilih
+      const name = selectedPoli.nama;
+      const description = selectedPoli.deskripsi;
+      const locationType = faker.helpers.arrayElement(listTipeFisikLokasi);
+
       fillPoliForm(name, locationType, description);
 
       // Klik tombol 'Simpan'
@@ -90,8 +260,12 @@ describe("Fungsionalitas Data Poli", () => {
     });
 
     it("Menambah Data Poli Baru tanpa mengisi keterangan", () => {
-      const name = faker.company.name();
-      fillPoliForm(name, "Room", "");
+      const selectedPoli = faker.helpers.arrayElement(listPoli);
+
+      // Mengambil nama dan deskripsi dari elemen yang dipilih
+      const name = selectedPoli.nama;
+      const locationType = faker.helpers.arrayElement(listTipeFisikLokasi);
+      fillPoliForm(name, locationType, "");
       cy.get('button[type="submit"]').click();
 
       // Memverifikasi bahwa alert sukses muncul dan mengandung teks yang diharapkan
@@ -103,7 +277,10 @@ describe("Fungsionalitas Data Poli", () => {
       cy.get(":nth-child(3) > .form-control").type(`${name}{enter}`);
       cy.get('[data-key="0"] > :nth-child(3)').should("have.text", name);
       cy.get('[data-key="0"] > :nth-child(4)').should("be.empty");
-      cy.get('[data-key="0"] > :nth-child(5)').should("have.text", "Room");
+      cy.get('[data-key="0"] > :nth-child(5)').should(
+        "have.text",
+        locationType
+      );
       cy.get('[data-key="0"] > :nth-child(7)').should("have.text", "Aktif");
 
       // Verifikasi bahwa data yang baru saja ditambahkan ada di menu Laporan Data Poli

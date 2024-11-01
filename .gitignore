@@ -11,6 +11,9 @@ yarn-error.log
 /.pnp
 .pnp.js
 
+package-lock.json
+package.json
+
 # Testing
 /coverage
 

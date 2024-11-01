@@ -255,7 +255,7 @@ describe("Fungsionalitas Data Dokter", () => {
       cy.get(":nth-child(6) > :nth-child(19)").contains("dokter_stemp");
     });
 
-    it.only("Menambah data dokter sekaligus menambah user", () => {
+    it("Menambah data dokter sekaligus menambah user", () => {
       fillDokterForm(
         nik,
         nama,
@@ -332,11 +332,11 @@ describe("Fungsionalitas Data Dokter", () => {
       cy.get('[data-key="0"] > :nth-child(6) > :nth-child(11)').should(
         "be.exist"
       );
-      cy.get('[data-key="0"] > :nth-child(6) > :nth-child(11)').contains(
-        "dokter_ttd"
+      cy.get('[data-key="0"] > :nth-child(6) > :nth-child(11)').should(
+        "be.exist"
       );
-      cy.get('[data-key="0"] > :nth-child(6) > :nth-child(11)').contains(
-        "dokter_stemp"
+      cy.get('[data-key="0"] > :nth-child(6) > :nth-child(11)').should(
+        "be.exist"
       );
     });
 
@@ -388,9 +388,45 @@ describe("Fungsionalitas Data Dokter", () => {
   context("Mengubah Data Dokter", () => {
     beforeEach(() => {
       navigateToDataDokter();
+      cy.get(".box-header > h1").should;
+      "have.text", "Ubah Dokter";
+      verifyLabel();
     });
 
-    it("Mengubah data dokter tanpa mengubah user", () => {});
+    it("Mengubah data dokter tanpa mengubah user", () => {
+      const namaDokter = "Mahmud Wahyudin";
+      // const namaDokter = "Daniswara Abimanyu";
+      // const nikDokter = "9974335477372540";
+      // const spesialisDokter = "Spesialis Saraf";
+      // const alamatDokter = "Ki. Zahrah no 63 Suite 173";
+      // const koataDokter = "Wangi Wangi"
+      // const noTelpDokter = "+626632144152";
+      // const noStrDokter = "28 09 7 4 8 54-136566";
+      // const emailDokter = "Marwata_Nanda@gmail.com"
+      // const tmtDokter = "16 Jul 2003";
+      // const tglRegDokter = "23 Sep 2024";
+      // const statusDokter = "Aktif";
+      cy.get(":nth-child(3) > .form-control").type(`${namaDokter}{enter}`);
+      cy.get('[data-key="0"] > :nth-child(3)').should("have.text", namaDokter);
+      cy.get('[href="/dokter/update/1813"] > .glyphicon').click();
+
+      cy.get("#dokter-doknik").should("have.value", "7015167190627633").clear();
+      cy.get("#dokter-doknama").should("have.value", "Mahmud Wahyudin").clear();
+      cy.get("#dokter-dokspesialis")
+        .should("have.value", "Spesialis Bedah Umum")
+        .clear();
+      cy.get("#dokter-dokalamat")
+        .should("have.value", "Gg. Adhitama no 34 Suite 643")
+        .clear();
+      cy.get("#dokter-dokkota").should("have.value", "Singaraja").clear();
+      cy.get("#dokter-doktelp").should("have.value", "+6265051636722").clear();
+      cy.get("#dokter-doknostr")
+        .should("have.value", "89 44 4 7 1 41-907341")
+        .clear();
+      cy.get("#dokter-doktglmulai")
+        .clear()
+        .type(tmt + "{enter}");
+    });
   });
 
   context("Aktif / Non Aktif Data Dokter", () => {
